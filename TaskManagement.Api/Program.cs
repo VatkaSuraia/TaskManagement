@@ -1,20 +1,28 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Http.HttpResults;
+using TaskManagement.Application;
+using TaskManagement.Infrastructure;
+
 using TaskManagement.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 
-builder.Services.AddEndpoints(typeof(Program).Assembly);
+builder.Services.AddEndpointsApiExplorer(); 
+
+builder.Services.AddOpenApi(); 
+
+builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddEndpoints(typeof(TaskManagement.Application.DependencyInjection).Assembly);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseMapEndpoints(new CancellationToken(), null); 
+
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi("/swagger/v1/swagger.json");
@@ -23,13 +31,6 @@ if (app.Environment.IsDevelopment())
             .SwaggerEndpoint("/swagger/v1/swagger.json", "TaskManagement API v1")
     );
 }
-
-app.MapGet("/health", () => new
-{
-    Status = "Healthy",
-    Title = "TaskManagement API",
-    ApiVersion = "v1"
-});
 
 app.UseAuthorization();
 

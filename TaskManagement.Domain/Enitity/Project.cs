@@ -1,28 +1,28 @@
 namespace TaskManagement.Domain.Enitity;
 
-public record Projects
+public class Project
 {
-    private Projects(Guid id, string name, string? description, DateTime created)
+    private Project(Guid id, string name, string? description, DateTime created)
     {
         Id = id;
         Name = name;
         Description = description;
-        Created = created;
+        CreatedAt = created;
     }
     public Guid Id { get; init; }
-    
-    string Name { get; init; }
-    
-    string? Description { get; init; }
-    
-    DateTime Created { get; init; }
 
-    public static Projects CreateProject(string name, string? description, DateTime? created)
+    public string Name { get; init; }
+
+    public string Description { get; init; }
+
+    public DateTime CreatedAt { get; init; }
+
+    public static Project CreateProject(string name, string? description, DateTime? created)
     {
         if(string.IsNullOrWhiteSpace(name))
             throw new ArgumentNullException(nameof(name));
 
-        return new Projects(
+        return new Project(
             Guid.NewGuid(),
             name,
             description ?? string.Empty,

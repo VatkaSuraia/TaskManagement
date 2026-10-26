@@ -19,7 +19,7 @@ public static class EndpointExtensions
         return service;
     }
     
-    public static IApplicationBuilder UseEndpoints(this WebApplication app, CancellationToken cancellationToken,
+    public static IApplicationBuilder UseMapEndpoints(this WebApplication app, CancellationToken cancellationToken,
         RouteGroupBuilder? routeGroupBuilder = null)
     {
         IEnumerable<IEndpoints> endpoints = app.Services.GetRequiredService<IEnumerable<IEndpoints>>();
@@ -29,7 +29,7 @@ public static class EndpointExtensions
         else builder = app;
         
         foreach (IEndpoints endpoint in endpoints)
-            endpoint.MapEndpoints(builder, cancellationToken);
+            endpoint.Map(builder, cancellationToken);
         
         return app;
     }
